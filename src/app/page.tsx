@@ -1,7 +1,8 @@
 import BorrowingSteps from "@/components/home/BorrowingSteps";
 import HeroSlider from "@/components/home/HeroSlider";
 import NewArrivals from "@/components/home/NewArrivals";
-import ReadingBenefits from "@/components/home/ReadingBenefits";
+import TopCategories from "@/components/home/TopCategories";
+
 
 export default function HomePage() {
   return (
@@ -9,7 +10,7 @@ export default function HomePage() {
       <HeroSlider />
       <NewArrivals />
       <BorrowingSteps />
-      <ReadingBenefits />
+      <TopCategories />
     </main>
   );
 }

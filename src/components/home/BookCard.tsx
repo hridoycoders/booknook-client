@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 export interface Book {
@@ -25,13 +26,14 @@ export default function BookCard({ book }: BookCardProps) {
         href={`/books/${book._id}`}
         className="relative block overflow-hidden bg-[#F5F0E6] dark:bg-[#263D36]"
       >
-        <div className="flex aspect-[4/3] items-center justify-center overflow-hidden p-3 sm:aspect-[4/5] sm:p-5">
+        <div className="flex aspect-[4/3] items-center justify-center overflow-hidden p-3 sm:aspect-[5/4] sm:p-4 lg:aspect-[4/3] lg:p-8 xl:aspect-[5/4]">
           {book.image ? (
-            <img
+            <Image
               src={book.image}
               alt={book.title}
-              loading="lazy"
-              className="h-full w-full rounded-md object-contain transition duration-500 group-hover:scale-105"
+              width={300}
+              height={400}
+              className="h-full w-full scale-125 rounded-md object-contain transition duration-500 group-hover:scale-[1.3]"
             />
           ) : (
             <div className="flex h-full w-full items-center justify-center text-5xl">
@@ -41,18 +43,18 @@ export default function BookCard({ book }: BookCardProps) {
         </div>
 
         {/* Category Badge */}
-        <span className="absolute left-2 top-2 max-w-[85%] truncate rounded-md bg-white/95 px-2 py-1 text-[9px] font-bold text-[#263D36] shadow-sm sm:left-3 sm:top-3 sm:px-3 sm:text-[10px] dark:bg-[#121B18]/95 dark:text-[#E5A66F]">
+        <span className="absolute left-2 top-2 max-w-[85%] truncate rounded-md bg-white/95 px-2 py-1 text-[9px] font-bold text-[#263D36] shadow-sm sm:left-3 sm:top-3 sm:px-3 sm:py-1.5 sm:text-[10px] dark:bg-[#121B18]/95 dark:text-[#E5A66F]">
           {book.category}
         </span>
       </Link>
 
       {/* Book Information */}
-      <div className="flex flex-1 flex-col p-3 sm:p-4">
+      <div className="flex flex-1 flex-col p-3 sm:p-4 lg:p-6">
         <h3 className="line-clamp-2 text-sm font-bold leading-5 text-[#263D36] transition group-hover:text-[#BD7641] dark:text-[#F5F0E6] dark:group-hover:text-[#E5A66F] sm:text-base sm:leading-6">
           {book.title}
         </h3>
 
-        <p className="mt-1 truncate text-[11px] text-[#66736B] dark:text-[#AAB7AE] sm:text-xs">
+        <p className="mt-1.5 truncate text-[11px] text-[#66736B] dark:text-[#AAB7AE] sm:text-xs">
           By {book.author}
         </p>
 

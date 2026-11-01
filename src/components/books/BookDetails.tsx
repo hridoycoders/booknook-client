@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Book } from "@/components/home/BookCard";
+import Image from "next/image";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
@@ -89,15 +90,21 @@ export default function BookDetails({ id }: BookDetailsProps) {
 
         <section className="grid overflow-hidden rounded-2xl border border-[#E8E2D6] bg-white shadow-sm dark:border-[#34453D] dark:bg-[#1E2B26] md:grid-cols-2">
           {/* Book Image */}
-          <div className="flex min-h-[280px] items-center justify-center bg-[#EEE8DC] p-8 dark:bg-[#263D36] sm:min-h-[450px] sm:p-12">
+          <div className="flex min-h-[280px] items-center justify-center border-b border-[#E8E2D6] bg-[#EEE8DC] p-6 dark:border-[#34453D] dark:bg-[#263D36] sm:min-h-[450px] sm:border-b-0 sm:border-r sm:p-10">
             {book.image ? (
-              <img
-                src={book.image}
-                alt={book.title}
-                className="max-h-[380px] w-full object-contain"
-              />
+              <div className="flex h-[280px] w-[220px] items-center justify-center overflow-hidden rounded-lg border-2 border-[#D8CDBB] bg-white p-2 shadow-lg dark:border-[#52685B] dark:bg-[#1E2B26] sm:h-[380px] sm:w-[280px]">
+                <Image
+                  src={book.image}
+                  alt={book.title}
+                  width={300}
+                  height={400}
+                  className="h-full w-full rounded-md object-contain"
+                />
+              </div>
             ) : (
-              <div className="text-8xl">📚</div>
+              <div className="flex h-[280px] w-[220px] items-center justify-center rounded-lg border-2 border-[#D8CDBB] bg-white text-8xl shadow-lg dark:border-[#52685B] dark:bg-[#1E2B26]">
+                📚
+              </div>
             )}
           </div>
 
