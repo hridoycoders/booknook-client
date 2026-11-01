@@ -11,7 +11,6 @@ export default function NewArrivals() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // Fetch books from the server
   const fetchBooks = useCallback(async (signal?: AbortSignal) => {
     try {
       const response = await fetch(`${API_URL}/books`, { signal });
@@ -49,7 +48,6 @@ export default function NewArrivals() {
     }
   }, []);
 
-  // Initial API request
   useEffect(() => {
     const controller = new AbortController();
 
@@ -64,7 +62,6 @@ export default function NewArrivals() {
     };
   }, [fetchBooks]);
 
-  // Retry API request
   const handleRetry = () => {
     setLoading(true);
     setError("");
@@ -72,20 +69,20 @@ export default function NewArrivals() {
   };
 
   return (
-    <section className="mx-auto w-full max-w-7xl px-3 py-8 sm:px-6 sm:py-14 lg:px-8 lg:py-20">
+    <section className="mx-auto w-full max-w-7xl px-3 py-8 transition-colors sm:px-6 sm:py-14 lg:px-8 lg:py-20">
       {/* Section Heading */}
       <div className="flex flex-col items-center justify-between gap-4 sm:flex-row sm:items-end">
         <div className="w-full">
-          <p className="text-center text-[10px] font-bold tracking-[0.18em] text-[#bd7641] sm:text-xs">
+          <p className="text-center text-[10px] font-bold tracking-[0.18em] text-[#BD7641] dark:text-[#E5A66F] sm:text-xs">
             FRESH FROM OUR LIBRARY
           </p>
 
           <div className="mb-6 text-center sm:mb-10">
-            <h2 className="mt-2 text-xl font-extrabold tracking-tight text-[#263d36] sm:text-3xl lg:text-4xl">
+            <h2 className="mt-2 text-xl font-extrabold tracking-tight text-[#263D36] dark:text-[#F5F0E6] sm:text-3xl lg:text-4xl">
               New Arrivals
             </h2>
 
-            <p className="mx-auto mt-2 max-w-md text-[11px] leading-5 text-[#66736b] sm:text-sm sm:leading-7">
+            <p className="mx-auto mt-2 max-w-md text-[11px] leading-5 text-[#66736B] dark:text-[#AAB7AE] sm:text-sm sm:leading-7">
               Discover the latest additions to our growing book collection.
             </p>
           </div>
@@ -93,7 +90,7 @@ export default function NewArrivals() {
 
         <Link
           href="/books"
-          className="inline-flex w-fit shrink-0 items-center gap-2 text-xs font-bold text-[#263d36] transition hover:text-[#bd7641] sm:mb-10 sm:text-sm"
+          className="inline-flex w-fit shrink-0 items-center gap-2 text-xs font-bold text-[#263D36] transition hover:text-[#BD7641] dark:text-[#F5F0E6] dark:hover:text-[#E5A66F] sm:mb-10 sm:text-sm"
         >
           View All Books <span>→</span>
         </Link>
@@ -105,12 +102,12 @@ export default function NewArrivals() {
           {Array.from({ length: 6 }).map((_, index) => (
             <div
               key={index}
-              className="animate-pulse overflow-hidden rounded-xl border border-[#e8e2d6] bg-white p-3 sm:p-4"
+              className="animate-pulse overflow-hidden rounded-xl border border-[#E8E2D6] bg-white p-3 dark:border-[#34453D] dark:bg-[#1E2B26] sm:p-4"
             >
-              <div className="aspect-[4/3] rounded-lg bg-[#e8e2d6] sm:aspect-[4/5]" />
-              <div className="mt-4 h-3 w-3/4 rounded bg-[#e8e2d6]" />
-              <div className="mt-3 h-2 w-1/2 rounded bg-[#eee9df]" />
-              <div className="mt-5 h-8 rounded bg-[#e8e2d6]" />
+              <div className="aspect-[4/3] rounded-lg bg-[#E8E2D6] dark:bg-[#34453D] sm:aspect-[4/5]" />
+              <div className="mt-4 h-3 w-3/4 rounded bg-[#E8E2D6] dark:bg-[#34453D]" />
+              <div className="mt-3 h-2 w-1/2 rounded bg-[#EEE9DF] dark:bg-[#263D36]" />
+              <div className="mt-5 h-8 rounded bg-[#E8E2D6] dark:bg-[#34453D]" />
             </div>
           ))}
         </div>
@@ -118,13 +115,15 @@ export default function NewArrivals() {
 
       {/* Error State */}
       {!loading && error && (
-        <div className="mt-8 rounded-xl border border-red-200 bg-red-50 px-4 py-8 text-center">
-          <p className="text-sm font-semibold text-red-700">{error}</p>
+        <div className="mt-8 rounded-xl border border-red-200 bg-red-50 px-4 py-8 text-center dark:border-red-900 dark:bg-red-950/30">
+          <p className="text-sm font-semibold text-red-700 dark:text-red-300">
+            {error}
+          </p>
 
           <button
             type="button"
             onClick={handleRetry}
-            className="mt-4 rounded-md bg-[#263d36] px-5 py-2.5 text-xs font-bold text-white transition hover:bg-[#3b594d]"
+            className="mt-4 rounded-md bg-[#263D36] px-5 py-2.5 text-xs font-bold text-white transition hover:bg-[#3B594D] dark:bg-[#D18B55] dark:text-[#121B18] dark:hover:bg-[#E5A66F]"
           >
             Try Again
           </button>
@@ -133,14 +132,14 @@ export default function NewArrivals() {
 
       {/* Empty State */}
       {!loading && !error && books.length === 0 && (
-        <div className="mt-8 rounded-xl border border-dashed border-[#d9d2c5] bg-white px-4 py-10 text-center sm:py-12">
+        <div className="mt-8 rounded-xl border border-dashed border-[#D9D2C5] bg-white px-4 py-10 text-center transition-colors dark:border-[#52645A] dark:bg-[#1E2B26] sm:py-12">
           <p className="text-3xl">📚</p>
 
-          <h3 className="mt-3 text-sm font-bold text-[#263d36] sm:text-base">
+          <h3 className="mt-3 text-sm font-bold text-[#263D36] dark:text-[#F5F0E6] sm:text-base">
             No Books Available Yet
           </h3>
 
-          <p className="mt-2 text-[11px] text-[#66736b] sm:text-sm">
+          <p className="mt-2 text-[11px] text-[#66736B] dark:text-[#AAB7AE] sm:text-sm">
             New books will appear here when they are added.
           </p>
         </div>
