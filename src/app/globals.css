@@ -92,3 +92,17 @@ a:focus-visible {
     border-color: var(--border);
   }
 }
+
+.booknook-swiper .swiper-button-next,
+.booknook-swiper .swiper-button-prev {
+  color: #d18b55;
+}
+
+.booknook-swiper .swiper-pagination-bullet {
+  background: #d18b55;
+  opacity: 0.45;
+}
+
+.booknook-swiper .swiper-pagination-bullet-active {
+  opacity: 1;
+}
