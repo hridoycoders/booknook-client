@@ -17,19 +17,22 @@ const navLinks = [
 export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
-
   const { data: session, isPending } = authClient.useSession();
 
-  const [menuOpen, setMenuOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const user = session?.user;
+
+  const closeMenus = () => {
+    setProfileOpen(false);
+    setMenuOpen(false);
+  };
 
   const handleLogout = async () => {
     try {
       await authClient.signOut();
-      setProfileOpen(false);
-      setMenuOpen(false);
+      closeMenus();
       router.push("/login");
       router.refresh();
     } catch (error) {
@@ -37,25 +40,20 @@ export default function Navbar() {
     }
   };
 
-  const closeMenus = () => {
-    setMenuOpen(false);
-    setProfileOpen(false);
-  };
-
   return (
     <header className="sticky top-0 z-50 border-b theme-border bg-[var(--background)]/95 backdrop-blur-md">
-      <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-2.5 sm:px-6 sm:py-3 lg:px-8">
+      <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
         {/* Logo */}
         <Link
           href="/"
           onClick={closeMenus}
-          className="flex shrink-0 items-center gap-2"
+          className="flex shrink-0 items-center gap-3"
         >
-          <span className="flex h-9 w-9 items-center justify-center rounded-md bg-[#263D36] text-white dark:bg-[#D18B55] dark:text-[#121B18]">
+          <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#263D36] text-white dark:bg-[#D18B55] dark:text-[#121B18] sm:h-12 sm:w-12">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="21"
-              height="21"
+              width="27"
+              height="27"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -67,35 +65,37 @@ export default function Navbar() {
               <path d="M3 18V5a2 2 0 0 1 2-2h4a3 3 0 0 1 3 3 3 3 0 0 1 3-3h4a2 2 0 0 1 2 2v13a1 1 0 0 1-1 1h-5a3 3 0 0 0-3 2 3 3 0 0 0-3-2H4a1 1 0 0 1-1-1Z" />
             </svg>
           </span>
-
-          <span className="text-xl font-bold tracking-tight text-[#263D36] dark:text-[#F5F0E6] sm:text-2xl">
+          <span className="text-2xl font-extrabold tracking-tight text-[#263D36] dark:text-[#F5F0E6] sm:text-3xl">
             BookNook
           </span>
         </Link>
 
-        {/* Desktop Navigation */}
-        <div className="hidden items-center gap-6 lg:flex">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={`text-sm font-medium transition-colors ${
-                pathname === link.href
-                  ? "text-[#D18B55] dark:text-[#E5A66F]"
-                  : "theme-muted hover:theme-text"
-              }`}
-            >
-              {link.name}
-            </Link>
-          ))}
-        </div>
+        {/* Desktop Navigation - Guest only */}
+        {!isPending && !user && (
+          <div className="hidden items-center gap-5 lg:flex">
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`text-sm font-medium transition-colors ${
+                  pathname === link.href
+                    ? "text-[#D18B55] dark:text-[#E5A66F]"
+                    : "theme-muted hover:theme-text"
+                }`}
+              >
+                {link.name}
+              </Link>
+            ))}
+          </div>
+        )}
 
         {/* Right Side */}
         <div className="flex items-center gap-2 sm:gap-3">
-          {/* Theme Toggle */}
-          <ThemeToggle />
+          <div className="scale-90 sm:scale-95">
+            <ThemeToggle />
+          </div>
 
-          {/* Login / Register */}
+          {/* Guest Login/Register */}
           {!isPending && !user && (
             <div className="hidden items-center gap-2 sm:flex">
               <Link
@@ -104,120 +104,187 @@ export default function Navbar() {
               >
                 Login
               </Link>
-
               <Link
                 href="/signup"
-                className="rounded-lg bg-[#263D36] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#344F45] dark:bg-[#D18B55] dark:text-[#121B18] dark:hover:bg-[#E5A66F]"
+                className="rounded-lg bg-[#263D36] px-4 py-2 text-sm font-semibold text-white hover:bg-[#3B594D] dark:bg-[#D18B55] dark:text-[#121B18] dark:hover:bg-[#E5A66F]"
               >
                 Register
               </Link>
             </div>
           )}
 
-          {/* Profile */}
+          {/* Modern Mobile Hamburger */}
+          {!isPending && !user && (
+            <button
+              onClick={() => setMenuOpen((prev) => !prev)}
+              className="group flex h-10 w-10 items-center justify-center rounded-xl border border-[#E8E2D6] bg-[#F5F0E6] transition-all duration-300 hover:border-[#D18B55] hover:bg-[#263D36] dark:border-[#34453D] dark:bg-[#1E2B26] dark:hover:bg-[#D18B55] lg:hidden"
+              aria-label="Toggle navigation menu"
+              aria-expanded={menuOpen}
+            >
+              <span className="flex w-[18px] flex-col items-center gap-[5px]">
+                <span
+                  className={`h-[2px] rounded-full bg-[#263D36] transition-all duration-300 group-hover:bg-white dark:bg-[#F5F0E6] dark:group-hover:bg-[#121B18] ${
+                    menuOpen ? "w-5 translate-y-[7px] rotate-45" : "w-5"
+                  }`}
+                />
+                <span
+                  className={`h-[2px] rounded-full bg-[#263D36] transition-all duration-300 group-hover:bg-white dark:bg-[#F5F0E6] dark:group-hover:bg-[#121B18] ${
+                    menuOpen ? "w-0 opacity-0" : "w-3"
+                  }`}
+                />
+                <span
+                  className={`h-[2px] rounded-full bg-[#263D36] transition-all duration-300 group-hover:bg-white dark:bg-[#F5F0E6] dark:group-hover:bg-[#121B18] ${
+                    menuOpen ? "w-5 -translate-y-[7px] -rotate-45" : "w-4"
+                  }`}
+                />
+              </span>
+            </button>
+          )}
+
+          {/* Logged-in Profile */}
           {!isPending && user && (
             <div className="relative">
               <button
                 onClick={() => setProfileOpen((prev) => !prev)}
-                className="flex h-9 w-9 items-center justify-center rounded-full border-2 border-[#263D36] bg-[#DCD5C9] text-sm font-bold text-[#263D36] shadow-sm transition hover:border-[#D18B55] dark:border-[#D18B55] dark:bg-[#34453D] dark:text-[#F5F0E6]"
-                aria-expanded={profileOpen}
+                className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-full border-2 border-[#D18B55] bg-[#DCD5C9] font-bold text-[#263D36] shadow-sm transition hover:scale-105 sm:h-12 sm:w-12"
                 aria-label="Open profile menu"
+                aria-expanded={profileOpen}
               >
-                {user.name?.charAt(0)?.toUpperCase() || "U"}
+                {user.image ? (
+                  <img
+                    src={user.image}
+                    alt={user.name || "Profile"}
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  user.name?.charAt(0)?.toUpperCase() || "U"
+                )}
               </button>
 
               {profileOpen && (
-                <div className="absolute right-0 top-full mt-3 w-56 overflow-hidden rounded-xl border theme-border theme-card shadow-lg">
-                  <div className="border-b theme-border px-4 py-3">
-                    <p className="truncate text-sm font-semibold theme-text">
-                      {user.name || "User"}
-                    </p>
-                    <p className="truncate text-xs theme-muted">{user.email}</p>
-                  </div>
-
-                  <Link
-                    href="/profile"
-                    onClick={() => setProfileOpen(false)}
-                    className="block px-4 py-3 text-sm theme-text transition hover:bg-[var(--background)]"
-                  >
-                    My Profile
-                  </Link>
-
+                <>
                   <button
-                    onClick={handleLogout}
-                    className="w-full px-4 py-3 text-left text-sm font-medium text-red-600 transition hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950/30"
-                  >
-                    Logout
-                  </button>
-                </div>
+                    type="button"
+                    aria-label="Close profile menu"
+                    className="fixed inset-0 z-40 cursor-default"
+                    onClick={closeMenus}
+                  />
+
+                  <div className="absolute right-0 top-full z-50 mt-3 w-64 overflow-hidden rounded-xl border theme-border theme-card shadow-xl sm:w-72">
+                    <div className="flex items-center gap-3 border-b theme-border px-4 py-4">
+                      {user.image ? (
+                        <img
+                          src={user.image}
+                          alt="Profile"
+                          className="h-11 w-11 rounded-full border-2 border-[#D18B55] object-cover"
+                        />
+                      ) : (
+                        <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#DCD5C9] font-bold text-[#263D36] dark:bg-[#34453D] dark:text-[#F5F0E6]">
+                          {user.name?.charAt(0)?.toUpperCase() || "U"}
+                        </div>
+                      )}
+                      <div className="min-w-0">
+                        <p className="truncate text-sm font-bold theme-text">
+                          {user.name || "User"}
+                        </p>
+                        <p className="truncate text-xs theme-muted">
+                          {user.email}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="p-2">
+                      {navLinks.map((link) => (
+                        <Link
+                          key={link.href}
+                          href={link.href}
+                          onClick={closeMenus}
+                          className={`block rounded-lg px-3 py-2.5 text-sm font-medium transition ${
+                            pathname === link.href
+                              ? "bg-[#263D36] text-white dark:bg-[#D18B55] dark:text-[#121B18]"
+                              : "theme-text hover:bg-[var(--border)]"
+                          }`}
+                        >
+                          {link.name}
+                        </Link>
+                      ))}
+                    </div>
+
+                    <div className="border-t theme-border p-2">
+                      <Link
+                        href="/update-profile"
+                        onClick={closeMenus}
+                        className="block rounded-lg px-3 py-2.5 text-sm font-medium theme-text hover:bg-[var(--border)]"
+                      >
+                        Update Profile
+                      </Link>
+                      <button
+                        onClick={handleLogout}
+                        className="w-full rounded-lg px-3 py-2.5 text-left text-sm font-semibold text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950/30"
+                      >
+                        Logout
+                      </button>
+                    </div>
+                  </div>
+                </>
               )}
             </div>
           )}
-
-          {/* Mobile Hamburger */}
-          <button
-            onClick={() => setMenuOpen((prev) => !prev)}
-            className="flex h-9 w-9 items-center justify-center rounded-lg text-xl theme-text transition hover:bg-[var(--border)] lg:hidden"
-            aria-label="Toggle navigation menu"
-            aria-expanded={menuOpen}
-          >
-            {menuOpen ? (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="23"
-                height="23"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-              >
-                <path d="m18 6-12 12M6 6l12 12" />
-              </svg>
-            ) : (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="23"
-                height="23"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-              >
-                <path d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-            )}
-          </button>
         </div>
       </nav>
 
-      {/* Mobile Navigation */}
-      {menuOpen && (
-        <div className="border-t theme-border theme-bg px-4 py-3 lg:hidden">
-          <div className="mx-auto flex max-w-7xl flex-col gap-1">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                onClick={closeMenus}
-                className={`rounded-lg px-4 py-3 text-sm font-medium transition ${
-                  pathname === link.href
-                    ? "bg-[#263D36] text-white dark:bg-[#D18B55] dark:text-[#121B18]"
-                    : "theme-text hover:bg-[var(--border)]"
-                }`}
-              >
-                {link.name}
-              </Link>
-            ))}
+      {/* Modern Mobile Navigation */}
+      {menuOpen && !user && (
+        <div className="border-t border-[#E8E2D6] bg-[#F5F0E6] px-4 py-4 dark:border-[#34453D] dark:bg-[#121B18] lg:hidden">
+          <div className="mx-auto max-w-7xl">
+            <div className="overflow-hidden rounded-2xl border border-[#E8E2D6] bg-white p-3 shadow-lg dark:border-[#34453D] dark:bg-[#1E2B26]">
+              {/* Menu Heading */}
+              <div className="mb-2 px-3 py-2">
+                <p className="text-xs font-bold uppercase tracking-[2px] text-[#BD7641] dark:text-[#E5A66F]">
+                  Explore BookNook
+                </p>
+              </div>
 
-            {/* Mobile Login / Register */}
-            {!isPending && !user && (
-              <div className="mt-2 flex gap-2 border-t theme-border pt-3 sm:hidden">
+              {/* Navigation Links */}
+              <div className="space-y-1">
+                {navLinks.map((link, index) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={closeMenus}
+                    style={{ animationDelay: `${index * 50}ms` }}
+                    className={`flex items-center justify-between rounded-xl px-4 py-3.5 text-sm font-semibold transition-all duration-200 ${
+                      pathname === link.href
+                        ? "bg-[#263D36] text-white shadow-sm dark:bg-[#D18B55] dark:text-[#121B18]"
+                        : "text-[#263D36] hover:bg-[#F5F0E6] dark:text-[#F5F0E6] dark:hover:bg-[#34453D]"
+                    }`}
+                  >
+                    <span>{link.name}</span>
+
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="17"
+                      height="17"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="opacity-60"
+                    >
+                      <path d="m9 18 6-6-6-6" />
+                    </svg>
+                  </Link>
+                ))}
+              </div>
+
+              {/* Login / Register */}
+              <div className="mt-4 grid grid-cols-2 gap-3 border-t border-[#E8E2D6] pt-4 dark:border-[#34453D]">
                 <Link
                   href="/login"
                   onClick={closeMenus}
-                  className="flex-1 rounded-lg border theme-border px-4 py-2.5 text-center text-sm font-semibold theme-text"
+                  className="rounded-xl border border-[#E8E2D6] bg-[#F5F0E6] px-4 py-3 text-center text-sm font-bold text-[#263D36] transition hover:border-[#D18B55] hover:bg-[#EDE5D8] dark:border-[#34453D] dark:bg-[#26352E] dark:text-[#F5F0E6] dark:hover:bg-[#34453D]"
                 >
                   Login
                 </Link>
@@ -225,12 +292,12 @@ export default function Navbar() {
                 <Link
                   href="/signup"
                   onClick={closeMenus}
-                  className="flex-1 rounded-lg bg-[#263D36] px-4 py-2.5 text-center text-sm font-semibold text-white dark:bg-[#D18B55] dark:text-[#121B18]"
+                  className="rounded-xl bg-[#263D36] px-4 py-3 text-center text-sm font-bold text-white shadow-sm transition hover:bg-[#3B594D] dark:bg-[#D18B55] dark:text-[#121B18] dark:hover:bg-[#E5A66F]"
                 >
                   Register
                 </Link>
               </div>
-            )}
+            </div>
           </div>
         </div>
       )}
