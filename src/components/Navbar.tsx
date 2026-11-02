@@ -70,8 +70,8 @@ export default function Navbar() {
           </span>
         </Link>
 
-        {/* Desktop Navigation - Guest only */}
-        {!isPending && !user && (
+        {/* Desktop Navigation - Always Visible */}
+        {!isPending && (
           <div className="hidden items-center gap-5 lg:flex">
             {navLinks.map((link) => (
               <Link

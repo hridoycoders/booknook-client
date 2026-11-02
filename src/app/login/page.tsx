@@ -30,7 +30,10 @@ export default function LoginPage() {
         return;
       }
 
-      router.push("/");
+      const callbackURL =
+        new URLSearchParams(window.location.search).get("callbackURL") || "/";
+
+      router.push(callbackURL);
       router.refresh();
     } catch {
       setError("Something went wrong. Please try again.");
