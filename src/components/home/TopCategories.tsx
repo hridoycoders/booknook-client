@@ -43,7 +43,7 @@ export default function TopCategories() {
           {categories.map((category) => (
             <a
               key={category.name}
-              href="/books"
+              href={`/books?category=${encodeURIComponent(category.name)}`}
               className="group rounded-xl border border-[#E8E2D6] bg-[#F5F0E6] p-5 text-center transition duration-300 hover:-translate-y-1 hover:border-[#D18B55] hover:shadow-lg dark:border-[#34453D] dark:bg-[#1E2B26] sm:p-7"
             >
               <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-white text-3xl transition group-hover:scale-110 dark:bg-[#263D36]">

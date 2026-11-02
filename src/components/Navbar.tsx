@@ -52,8 +52,8 @@ export default function Navbar() {
           <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#263D36] text-white dark:bg-[#D18B55] dark:text-[#121B18] sm:h-12 sm:w-12">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="27"
-              height="27"
+              width="26"
+              height="26"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -65,7 +65,8 @@ export default function Navbar() {
               <path d="M3 18V5a2 2 0 0 1 2-2h4a3 3 0 0 1 3 3 3 3 0 0 1 3-3h4a2 2 0 0 1 2 2v13a1 1 0 0 1-1 1h-5a3 3 0 0 0-3 2 3 3 0 0 0-3-2H4a1 1 0 0 1-1-1Z" />
             </svg>
           </span>
-          <span className="text-2xl font-extrabold tracking-tight text-[#263D36] dark:text-[#F5F0E6] sm:text-3xl">
+
+          <span className="text-2xl font-extrabold tracking-tight text-[#263D36] dark:text-[#F5F0E6] sm:text-[28px]">
             BookNook
           </span>
         </Link>

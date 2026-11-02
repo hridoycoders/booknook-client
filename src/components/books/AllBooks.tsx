@@ -1,17 +1,23 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import BookCard, { Book } from "@/components/home/BookCard";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
 export default function AllBooks() {
+  const searchParams = useSearchParams();
+
   const [books, setBooks] = useState<Book[]>([]);
   const [search, setSearch] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [selectedCategory, setSelectedCategory] = useState(
+    () => searchParams.get("category") || "All",
+  );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  // Fetch books
   useEffect(() => {
     const controller = new AbortController();
 
@@ -46,10 +52,12 @@ export default function AllBooks() {
     return () => controller.abort();
   }, []);
 
+  // Available categories
   const categories = useMemo(() => {
     return ["All", ...Array.from(new Set(books.map((book) => book.category)))];
   }, [books]);
 
+  // Filter books
   const filteredBooks = useMemo(() => {
     return books.filter((book) => {
       const searchText = search.toLowerCase().trim();
@@ -59,11 +67,27 @@ export default function AllBooks() {
         book.author.toLowerCase().includes(searchText);
 
       const matchesCategory =
-        selectedCategory === "All" || book.category === selectedCategory;
+        selectedCategory === "All" ||
+        book.category.toLowerCase() === selectedCategory.toLowerCase();
 
       return matchesSearch && matchesCategory;
     });
   }, [books, search, selectedCategory]);
+
+  // Handle category selection
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategory(category);
+
+    const url = new URL(window.location.href);
+
+    if (category === "All") {
+      url.searchParams.delete("category");
+    } else {
+      url.searchParams.set("category", category);
+    }
+
+    window.history.replaceState(null, "", url);
+  };
 
   return (
     <main className="min-h-screen flex-1 bg-[#F5F0E6] transition-colors dark:bg-[#121B18]">
@@ -100,7 +124,7 @@ export default function AllBooks() {
             <button
               key={category}
               type="button"
-              onClick={() => setSelectedCategory(category)}
+              onClick={() => handleCategoryChange(category)}
               className={`rounded-full px-3 py-2 text-[10px] font-semibold transition sm:px-5 sm:text-xs ${
                 selectedCategory === category
                   ? "bg-[#263D36] text-white dark:bg-[#D18B55] dark:text-[#121B18]"
@@ -177,7 +201,7 @@ export default function AllBooks() {
               type="button"
               onClick={() => {
                 setSearch("");
-                setSelectedCategory("All");
+                handleCategoryChange("All");
               }}
               className="mt-4 rounded-lg bg-[#263D36] px-4 py-2.5 text-xs font-semibold text-white transition hover:bg-[#3B594D] dark:bg-[#D18B55] dark:text-[#121B18] dark:hover:bg-[#E5A66F]"
             >

@@ -49,7 +49,7 @@ const slides = [
 
 export default function HeroSlider() {
   return (
-    <section className="mx-auto w-full max-w-7xl px-3 py-0 sm:px-6 sm:py-1 lg:px-8">
+    <section className="mx-auto w-full max-w-7xl px-3 pb-2 pt-1 sm:px-6 sm:pb-4 sm:pt-3 lg:px-8 lg:pt-4">
       <Swiper
         modules={[Navigation, Pagination, Autoplay]}
         navigation
@@ -63,7 +63,8 @@ export default function HeroSlider() {
       >
         {slides.map((slide) => (
           <SwiperSlide key={slide.eyebrow}>
-            <div className="grid items-center gap-5 p-4 sm:gap-8 sm:p-8 lg:grid-cols-2 lg:gap-12 lg:p-12">
+            {/* Ændret padding herunder fra p-4 sm:p-8 lg:p-12 til p-3 sm:p-6 lg:p-8 for at mindske afstanden top og bund */}
+            <div className="grid items-center gap-5 p-3 sm:gap-6 sm:p-6 lg:grid-cols-2 lg:gap-12 lg:p-8">
               {/* Hero Image */}
               <div className="order-1 min-w-0 lg:order-2">
                 <div className="relative mx-auto max-w-[540px]">
@@ -100,7 +101,7 @@ export default function HeroSlider() {
                   {slide.eyebrow}
                 </span>
 
-                <h1 className="mt-4 max-w-xl text-[30px] font-extrabold leading-[1.15] tracking-tight text-[#263D36] dark:text-[#F5F0E6] min-[400px]:text-[34px] sm:mt-5 sm:text-[40px] sm:leading-tight md:text-5xl lg:text-[56px]">
+                <h1 className="mt-4 max-w-xl text-[30px] font-extrabold leading-[1.15] tracking-tight text-[#263D36] dark:text-[#F5F0E6] min-[400px]:text-[34px] sm:mt-4 sm:text-[36px] sm:leading-tight md:text-4xl lg:text-[48px]">
                   {slide.title.split(" ").map((word, index) => {
                     const highlightedWords = ["Magic", "Somewhere", "More."];
 
@@ -119,14 +120,14 @@ export default function HeroSlider() {
                   })}
                 </h1>
 
-                <p className="mt-3 max-w-lg text-[13px] leading-6 text-[#66736B] dark:text-[#AAB7AE] sm:mt-5 sm:text-sm sm:leading-7 lg:text-base lg:leading-8">
+                <p className="mt-3 max-w-lg text-[13px] leading-6 text-[#66736B] dark:text-[#AAB7AE] sm:mt-4 sm:text-sm sm:leading-6 lg:text-base lg:leading-7">
                   {slide.description}
                 </p>
 
-                <div className="mt-5 flex flex-wrap items-center gap-3 sm:mt-7 sm:gap-4">
+                <div className="mt-4 flex flex-wrap items-center gap-3 sm:mt-6 sm:gap-4">
                   <Link
                     href={slide.buttonLink}
-                    className="inline-flex items-center gap-2 rounded-md bg-[#263D36] px-4 py-2.5 text-xs font-bold text-white transition hover:bg-[#3B594D] dark:bg-[#D18B55] dark:text-[#121B18] dark:hover:bg-[#E5A66F] sm:gap-3 sm:px-6 sm:py-3.5 sm:text-sm"
+                    className="inline-flex items-center gap-2 rounded-md bg-[#263D36] px-4 py-2.5 text-xs font-bold text-white transition hover:bg-[#3B594D] dark:bg-[#D18B55] dark:text-[#121B18] dark:hover:bg-[#E5A66F] sm:gap-3 sm:px-6 sm:py-3 sm:text-sm"
                   >
                     {slide.buttonText}
                     <span aria-hidden="true">→</span>
