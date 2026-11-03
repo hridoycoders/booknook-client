@@ -1,36 +1,193 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📚 BookNook — Online Library Management System
 
-## Getting Started
+BookNook is a modern online library management platform where users can explore books, manage their personal book collections, borrow books, and track their borrowing history. It provides a smooth and responsive experience with secure authentication and an easy-to-use interface.
 
-First, run the development server:
+## 🌐 Live Website
+
+**Live Demo:** Coming Soon
+
+**Client Repository:** https://github.com/hridoycoders/booknook-client
+
+**Server Repository:** https://github.com/hridoycoders/booknook-server
+
+## ✨ Key Features
+
+- **User Authentication:** Secure user registration and login using Better Auth.
+- **Google Authentication:** Sign in with Google.
+- **Browse Books:** Explore all available books with category filtering.
+- **Book Details:** View detailed information about individual books.
+- **Add Books:** Authenticated users can add new books to the library.
+- **Manage Books:** Update and delete books added by the logged-in user.
+- **Borrow Books:** Borrow available books with a selected return date.
+- **Return Books:** Return borrowed books and update availability.
+- **My Books:** Manage your own book collection.
+- **My Borrows:** View and track your borrowed books.
+- **Responsive Design:** Optimized for desktop, tablet, and mobile devices.
+- **Dark Mode:** Switch between light and dark themes.
+- **Loading & Error Handling:** User-friendly loading states and error feedback.
+- **Private Routes:** Protect authenticated pages and preserve access after page reload.
+
+## 🛠️ Technologies Used
+
+### Frontend
+- Next.js
+- React
+- TypeScript
+- Tailwind CSS
+- Lucide React
+- Swiper
+- React Hot Toast
+- Next Themes
+
+### Authentication & Database
+- Better Auth
+- MongoDB
+- MongoDB Adapter
+
+### Backend
+- Node.js
+- Express.js
+- MongoDB
+- JSON Web Token (JWT)
+- JOSE
+- CORS
+
+### Deployment
+- Vercel
+
+## 📦 Installation & Setup
+
+### 1. Clone the Client Repository
+
+```bash
+git clone https://github.com/hridoycoders/booknook-client.git
+```
+
+### 2. Navigate to the Project Directory
+
+```bash
+cd booknook-client
+```
+
+### 3. Install Dependencies
+
+```bash
+npm install
+```
+
+### 4. Configure Environment Variables
+
+Create a `.env.local` file in the project root and add the environment variables required by your application.
+
+Example:
+
+```env
+NEXT_PUBLIC_API_URL=http://localhost:5000
+MONGODB_URI=your_mongodb_connection_string
+DB_NAME=your_database_name
+BETTER_AUTH_SECRET=your_better_auth_secret
+BETTER_AUTH_URL=http://localhost:3000
+```
+
+If Google authentication or Cloudinary is enabled, configure the corresponding credentials using the exact variable names used in your source code.
+
+**Important:** Never commit `.env.local` or expose secret keys in a public repository.
+
+### 5. Run the Development Server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## ⚙️ Backend Setup
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Clone the server repository separately:
 
-## Learn More
+```bash
+git clone https://github.com/hridoycoders/booknook-server.git
+```
 
-To learn more about Next.js, take a look at the following resources:
+Navigate to the server directory:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+cd booknook-server
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Install dependencies:
 
-## Deploy on Vercel
+```bash
+npm install
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Configure the server's `.env` file with your MongoDB and authentication environment variables.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Start the development server:
+
+```bash
+npm run dev
+```
+
+The backend runs locally at:
+
+```text
+http://localhost:5000
+```
+
+Production API:
+
+```text
+https://booknook-server-lib.vercel.app
+```
+
+## 📁 Project Structure
+
+```text
+booknook-client/
+├── public/
+├── src/
+│   ├── app/
+│   │   ├── add-book/
+│   │   ├── books/
+│   │   ├── login/
+│   │   ├── signup/
+│   │   ├── my-books/
+│   │   └── my-borrows/
+│   ├── components/
+│   │   ├── books/
+│   │   └── home/
+│   └── ...
+├── .env.local
+├── package.json
+└── README.md
+```
+
+*Note: This is a simplified overview of the project structure.*
+
+## 🔐 Security
+
+- Authentication is handled through Better Auth.
+- Protected API routes use token verification.
+- Environment variables are used for sensitive credentials.
+- Users can manage their own book records.
+
+## 🚀 Deployment
+
+The frontend is designed to be deployed on [Vercel](https://vercel.com/).
+
+The backend is deployed separately on Vercel.
+
+Before production deployment, configure the required environment variables in the Vercel project settings.
+
+## 👨‍💻 Author
+
+**Hridoy Ahmed**
+
+- GitHub: [hridoycoders](https://github.com/hridoycoders)
+
+---
+
+⭐ If you find this project interesting, feel free to explore the repositories and share your feedback.
+
+**BookNook — Your Personal Digital Library.**
