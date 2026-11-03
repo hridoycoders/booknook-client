@@ -135,7 +135,7 @@ export default function Footer() {
         <div className="mt-5 border-t border-[#E8E2D6] pt-3 sm:mt-8 sm:pt-5 lg:mt-10 lg:pt-6 dark:border-white/10">
           <div className="flex flex-row items-center justify-between gap-2">
             <p className="text-[9px] text-[#66736B] sm:text-xs dark:text-white/50">
-              © {new Date().getFullYear()} BookNook. All rights reserved.
+              © 2026 BookNook. All rights reserved.
             </p>
             <p className="text-[9px] text-[#66736B] sm:text-xs dark:text-white/50">
               Made with <span className="text-[#D18B55]">♥</span> for readers.
