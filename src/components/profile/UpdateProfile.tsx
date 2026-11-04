@@ -1,39 +1,36 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { authClient } from "@/lib/auth-client";
 
-export default function UpdateProfile() {
-  const { data: session, isPending } = authClient.useSession();
+type ProfileFormProps = {
+  initialName: string;
+  initialImage: string;
+  authEmail: string;
+};
 
-  const [name, setName] = useState("");
-  const [image, setImage] = useState("");
+function ProfileForm({
+  initialName,
+  initialImage,
+  authEmail,
+}: ProfileFormProps) {
+  const [name, setName] = useState(initialName);
+  const [image, setImage] = useState(initialImage);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [preview, setPreview] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
-  const user = session?.user;
+  const previewUrlRef = useRef<string | null>(null);
 
   useEffect(() => {
-    if (user) {
-      setName(user.name || "");
-      setImage(user.image || "");
-    }
-  }, [user]);
-
-  useEffect(() => {
-    if (!selectedFile) {
-      setPreview("");
-      return;
-    }
-
-    const previewUrl = URL.createObjectURL(selectedFile);
-    setPreview(previewUrl);
-
-    return () => URL.revokeObjectURL(previewUrl);
-  }, [selectedFile]);
+    return () => {
+      if (previewUrlRef.current) {
+        URL.revokeObjectURL(previewUrlRef.current);
+      }
+    };
+  }, []);
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -45,27 +42,46 @@ export default function UpdateProfile() {
 
     if (!file.type.startsWith("image/")) {
       setError("Please select a valid image.");
+      event.target.value = "";
       return;
     }
 
     if (file.size > 5 * 1024 * 1024) {
       setError("Image size must be under 5MB.");
+      event.target.value = "";
       return;
     }
 
+    if (previewUrlRef.current) {
+      URL.revokeObjectURL(previewUrlRef.current);
+    }
+
+    const previewUrl = URL.createObjectURL(file);
+
+    previewUrlRef.current = previewUrl;
+
+    setPreview(previewUrl);
     setSelectedFile(file);
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    if (loading) return;
+
+    if (name.trim().length < 2) {
+      setError("Name must be at least 2 characters.");
+      return;
+    }
+
     setLoading(true);
-    setMessage("");
     setError("");
+    setMessage("");
 
     try {
       let imageUrl = image;
 
+      // Upload image if a new image is selected
       if (selectedFile) {
         const formData = new FormData();
         formData.append("file", selectedFile);
@@ -82,9 +98,17 @@ export default function UpdateProfile() {
         }
 
         imageUrl = uploadData.imageUrl;
+
+        if (!imageUrl) {
+          throw new Error("Image URL was not returned.");
+        }
       }
 
-      const updateData: { name: string; image?: string } = {
+      // Prepare profile data
+      const updateData: {
+        name: string;
+        image?: string;
+      } = {
         name: name.trim(),
       };
 
@@ -92,42 +116,38 @@ export default function UpdateProfile() {
         updateData.image = imageUrl;
       }
 
+      // Update BetterAuth profile
       const result = await authClient.updateUser(updateData);
+
+      console.log("UPDATE RESULT:", result);
 
       if (result.error) {
         throw new Error(result.error.message || "Profile update failed.");
       }
 
-      setImage(imageUrl);
-      setSelectedFile(null);
+      // Update successful
       setMessage("Profile updated successfully!");
+
+      // Release preview URL
+      if (previewUrlRef.current) {
+        URL.revokeObjectURL(previewUrlRef.current);
+        previewUrlRef.current = null;
+      }
+
+      // Go to homepage immediately
+      window.location.href = "/";
     } catch (err) {
       console.error("Profile update error:", err);
+
       setError(
         err instanceof Error
           ? err.message
           : "Something went wrong. Please try again.",
       );
-    } finally {
+
       setLoading(false);
     }
   };
-
-  if (isPending) {
-    return (
-      <div className="flex min-h-[70vh] items-center justify-center theme-bg">
-        <p className="theme-muted">Loading profile...</p>
-      </div>
-    );
-  }
-
-  if (!user) {
-    return (
-      <div className="flex min-h-[70vh] items-center justify-center theme-bg">
-        <p className="theme-text">Please login to update your profile.</p>
-      </div>
-    );
-  }
 
   const currentImage = preview || image;
 
@@ -157,7 +177,7 @@ export default function UpdateProfile() {
                 />
               ) : (
                 <div className="flex h-32 w-32 items-center justify-center rounded-full border-4 border-[#E8E2D6] bg-[#DCD5C9] text-4xl font-bold text-[#263D36] shadow-md dark:border-[#34453D] dark:bg-[#34453D] dark:text-[#F5F0E6]">
-                  {name?.charAt(0)?.toUpperCase() || "U"}
+                  {name.charAt(0).toUpperCase() || "U"}
                 </div>
               )}
 
@@ -229,19 +249,20 @@ export default function UpdateProfile() {
             <input
               id="email"
               type="email"
-              value={user.email || ""}
+              value={authEmail}
               readOnly
               className="w-full cursor-not-allowed rounded-lg border border-[#E8E2D6] bg-gray-100 px-4 py-3 text-sm text-gray-500 outline-none dark:border-[#34453D] dark:bg-[#26352E] dark:text-gray-400"
             />
           </div>
 
-          {/* Messages */}
+          {/* Error */}
           {error && (
             <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-600 dark:bg-red-950/30 dark:text-red-400">
               {error}
             </p>
           )}
 
+          {/* Success */}
           {message && (
             <p className="rounded-lg bg-green-50 px-4 py-3 text-sm text-green-700 dark:bg-green-950/30 dark:text-green-400">
               {message}
@@ -259,5 +280,34 @@ export default function UpdateProfile() {
         </form>
       </div>
     </main>
+  );
+}
+
+export default function UpdateProfile() {
+  const { data: session, isPending } = authClient.useSession();
+
+  if (isPending) {
+    return (
+      <div className="flex min-h-[70vh] items-center justify-center theme-bg">
+        <p className="theme-muted">Loading profile...</p>
+      </div>
+    );
+  }
+
+  if (!session?.user) {
+    return (
+      <div className="flex min-h-[70vh] items-center justify-center theme-bg">
+        <p className="theme-text">Please login to update your profile.</p>
+      </div>
+    );
+  }
+
+  return (
+    <ProfileForm
+      key={session.user.id}
+      initialName={session.user.name || ""}
+      initialImage={session.user.image || ""}
+      authEmail={session.user.email || ""}
+    />
   );
 }
