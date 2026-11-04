@@ -42,36 +42,37 @@ export default function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 border-b theme-border bg-[var(--background)]/95 backdrop-blur-md">
-      <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
+      <nav className="mx-auto flex max-w-7xl items-center justify-between px-3 py-2.5 sm:px-6 sm:py-3 lg:px-8">
         {/* Logo */}
         <Link
           href="/"
           onClick={closeMenus}
-          className="flex shrink-0 items-center gap-3"
+          className="flex shrink-0 items-center gap-2 sm:gap-3"
         >
-          <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#263D36] text-white dark:bg-[#D18B55] dark:text-[#121B18] sm:h-12 sm:w-12">
+          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#263D36] text-white dark:bg-[#D18B55] dark:text-[#121B18] sm:h-12 sm:w-12 sm:rounded-xl">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="26"
-              height="26"
+              width="20"
+              height="20"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
+              className="sm:h-[26px] sm:w-[26px]"
             >
               <path d="M12 7v14" />
               <path d="M3 18V5a2 2 0 0 1 2-2h4a3 3 0 0 1 3 3 3 3 0 0 1 3-3h4a2 2 0 0 1 2 2v13a1 1 0 0 1-1 1h-5a3 3 0 0 0-3 2 3 3 0 0 0-3-2H4a1 1 0 0 1-1-1Z" />
             </svg>
           </span>
 
-          <span className="text-2xl font-extrabold tracking-tight text-[#263D36] dark:text-[#F5F0E6] sm:text-[28px]">
+          <span className="text-lg font-extrabold tracking-tight text-[#263D36] dark:text-[#F5F0E6] sm:text-[28px]">
             BookNook
           </span>
         </Link>
 
-        {/* Desktop Navigation - Always Visible */}
+        {/* Desktop Navigation */}
         {!isPending && (
           <div className="hidden items-center gap-5 lg:flex">
             {navLinks.map((link) => (
@@ -91,8 +92,9 @@ export default function Navbar() {
         )}
 
         {/* Right Side */}
-        <div className="flex items-center gap-2 sm:gap-3">
-          <div className="scale-90 sm:scale-95">
+        <div className="flex items-center gap-1 sm:gap-3">
+          {/* Theme Toggle */}
+          <div className="scale-[0.75] sm:scale-95">
             <ThemeToggle />
           </div>
 
@@ -105,6 +107,7 @@ export default function Navbar() {
               >
                 Login
               </Link>
+
               <Link
                 href="/signup"
                 className="rounded-lg bg-[#263D36] px-4 py-2 text-sm font-semibold text-white hover:bg-[#3B594D] dark:bg-[#D18B55] dark:text-[#121B18] dark:hover:bg-[#E5A66F]"
@@ -118,7 +121,7 @@ export default function Navbar() {
           {!isPending && !user && (
             <button
               onClick={() => setMenuOpen((prev) => !prev)}
-              className="group flex h-10 w-10 items-center justify-center rounded-xl border border-[#E8E2D6] bg-[#F5F0E6] transition-all duration-300 hover:border-[#D18B55] hover:bg-[#263D36] dark:border-[#34453D] dark:bg-[#1E2B26] dark:hover:bg-[#D18B55] lg:hidden"
+              className="group flex h-9 w-9 items-center justify-center rounded-xl border border-[#E8E2D6] bg-[#F5F0E6] transition-all duration-300 hover:border-[#D18B55] hover:bg-[#263D36] dark:border-[#34453D] dark:bg-[#1E2B26] dark:hover:bg-[#D18B55] lg:hidden sm:h-10 sm:w-10"
               aria-label="Toggle navigation menu"
               aria-expanded={menuOpen}
             >
@@ -145,23 +148,57 @@ export default function Navbar() {
           {/* Logged-in Profile */}
           {!isPending && user && (
             <div className="relative">
+              {/* Navbar Profile Banner */}
               <button
                 onClick={() => setProfileOpen((prev) => !prev)}
-                className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-full border-2 border-[#D18B55] bg-[#DCD5C9] font-bold text-[#263D36] shadow-sm transition hover:scale-105 sm:h-12 sm:w-12"
+                className="flex items-center gap-1 rounded-lg border border-[#D18B55]/40 bg-[#263D36] px-1 py-0.5 text-white shadow-sm transition hover:bg-[#344F43] dark:border-[#263D36]/20 dark:bg-[#F5F0E6] dark:text-[#263D36] dark:hover:bg-white sm:gap-2.5 sm:rounded-xl sm:px-3 sm:py-2"
                 aria-label="Open profile menu"
                 aria-expanded={profileOpen}
               >
-                {user.image ? (
-                  <img
-                    src={user.image}
-                    alt={user.name || "Profile"}
-                    className="h-full w-full object-cover"
-                  />
-                ) : (
-                  user.name?.charAt(0)?.toUpperCase() || "U"
-                )}
+                {/* Profile Image */}
+                <div className="flex h-6 w-6 shrink-0 items-center justify-center overflow-hidden rounded-md border border-[#D18B55] bg-[#DCD5C9] text-xs font-bold text-[#263D36] sm:h-10 sm:w-10 sm:rounded-lg sm:text-sm">
+                  {user.image ? (
+                    <img
+                      src={user.image}
+                      alt={user.name || "Profile"}
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    user.name?.charAt(0)?.toUpperCase() || "U"
+                  )}
+                </div>
+
+                {/* Member Name */}
+                <div className="min-w-0 text-left">
+                  <p className="max-w-[65px] truncate text-[9px] font-bold sm:max-w-[140px] sm:text-sm">
+                    {user.name || "User"}
+                  </p>
+
+                  <p className="text-[7px] font-medium text-[#E5A66F] dark:text-[#BD7641] sm:text-[10px]">
+                    BookNook Member
+                  </p>
+                </div>
+
+                {/* Dropdown Arrow */}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="11"
+                  height="11"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className={`shrink-0 transition-transform duration-200 sm:h-4 sm:w-4 ${
+                    profileOpen ? "rotate-180" : ""
+                  }`}
+                >
+                  <path d="m6 9 6 6 6-6" />
+                </svg>
               </button>
 
+              {/* Profile Dropdown */}
               {profileOpen && (
                 <>
                   <button
@@ -171,39 +208,52 @@ export default function Navbar() {
                     onClick={closeMenus}
                   />
 
-                  <div className="absolute right-0 top-full z-50 mt-3 w-64 overflow-hidden rounded-xl border theme-border theme-card shadow-xl sm:w-72">
-                    <div className="flex items-center gap-3 border-b theme-border px-4 py-4">
-                      {user.image ? (
-                        <img
-                          src={user.image}
-                          alt="Profile"
-                          className="h-11 w-11 rounded-full border-2 border-[#D18B55] object-cover"
-                        />
-                      ) : (
-                        <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#DCD5C9] font-bold text-[#263D36] dark:bg-[#34453D] dark:text-[#F5F0E6]">
-                          {user.name?.charAt(0)?.toUpperCase() || "U"}
-                        </div>
-                      )}
-                      <div className="min-w-0">
-                        <p className="truncate text-sm font-bold theme-text">
-                          {user.name || "User"}
-                        </p>
-                        <p className="truncate text-xs theme-muted">
-                          {user.email}
-                        </p>
-                      </div>
+                  <div className="absolute right-0 top-full z-50 mt-2 w-64 overflow-hidden rounded-xl border border-[#D18B55]/30 bg-[#263D36] text-white shadow-xl dark:border-[#263D36]/20 dark:bg-[#F5F0E6] dark:text-[#263D36] sm:w-72">
+                    {/* Profile Banner */}
+                    <div className="relative h-20 overflow-hidden bg-gradient-to-r from-[#17251F] via-[#263D36] to-[#3B594D] dark:from-[#EDE5D8] dark:via-[#F5F0E6] dark:to-[#DCD5C9]">
+                      <div className="absolute -right-5 -top-10 h-28 w-28 rounded-full border-[16px] border-white/10 dark:border-[#263D36]/10" />
+
+                      <div className="absolute -bottom-10 left-16 h-24 w-24 rounded-full bg-white/10 blur-2xl dark:bg-[#263D36]/10" />
+
+                      <p className="absolute bottom-3 left-4 text-[10px] font-bold uppercase tracking-[2px] text-white/80 dark:text-[#263D36]/70">
+                        BookNook Member
+                      </p>
                     </div>
 
-                    <div className="p-2">
+                    {/* Profile Information */}
+                    <div className="relative border-b border-white/15 px-3 pb-3 dark:border-[#263D36]/15">
+                      <div className="-mt-8 mb-2 flex h-14 w-14 items-center justify-center overflow-hidden rounded-xl border-[3px] border-[#263D36] bg-[#DCD5C9] text-xl font-bold text-[#263D36] shadow-md dark:border-[#F5F0E6] dark:bg-[#DCD5C9]">
+                        {user.image ? (
+                          <img
+                            src={user.image}
+                            alt={user.name || "Profile"}
+                            className="h-full w-full object-cover"
+                          />
+                        ) : (
+                          user.name?.charAt(0)?.toUpperCase() || "U"
+                        )}
+                      </div>
+
+                      <h3 className="truncate text-sm font-bold">
+                        {user.name || "User"}
+                      </h3>
+
+                      <p className="mt-0.5 truncate text-[11px] text-white/60 dark:text-[#263D36]/60">
+                        {user.email}
+                      </p>
+                    </div>
+
+                    {/* Navigation Links */}
+                    <div className="space-y-0.5 p-2">
                       {navLinks.map((link) => (
                         <Link
                           key={link.href}
                           href={link.href}
                           onClick={closeMenus}
-                          className={`block rounded-lg px-3 py-2.5 text-sm font-medium transition ${
+                          className={`block rounded-lg px-3 py-2 text-xs font-medium transition ${
                             pathname === link.href
-                              ? "bg-[#263D36] text-white dark:bg-[#D18B55] dark:text-[#121B18]"
-                              : "theme-text hover:bg-[var(--border)]"
+                              ? "bg-[#F5F0E6] text-[#263D36] dark:bg-[#263D36] dark:text-white"
+                              : "text-white/90 hover:bg-white/10 dark:text-[#263D36] dark:hover:bg-[#263D36]/10"
                           }`}
                         >
                           {link.name}
@@ -211,17 +261,19 @@ export default function Navbar() {
                       ))}
                     </div>
 
-                    <div className="border-t theme-border p-2">
+                    {/* Account Actions */}
+                    <div className="border-t border-white/15 p-2 dark:border-[#263D36]/15">
                       <Link
                         href="/update-profile"
                         onClick={closeMenus}
-                        className="block rounded-lg px-3 py-2.5 text-sm font-medium theme-text hover:bg-[var(--border)]"
+                        className="block rounded-lg px-3 py-2 text-xs font-semibold text-[#E5A66F] transition hover:bg-white/10 dark:text-[#BD7641] dark:hover:bg-[#263D36]/10"
                       >
                         Update Profile
                       </Link>
+
                       <button
                         onClick={handleLogout}
-                        className="w-full rounded-lg px-3 py-2.5 text-left text-sm font-semibold text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950/30"
+                        className="w-full rounded-lg px-3 py-2 text-left text-xs font-semibold text-red-300 transition hover:bg-red-500/10 dark:text-red-600 dark:hover:bg-red-500/10"
                       >
                         Logout
                       </button>
