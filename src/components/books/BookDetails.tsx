@@ -23,6 +23,7 @@ export default function BookDetails({ id }: BookDetailsProps) {
   const [message, setMessage] = useState("");
   const [duration, setDuration] = useState("14");
   const [borrowing, setBorrowing] = useState(false);
+  const [showFullDescription, setShowFullDescription] = useState(false);
 
   // Fetch Book Details
   useEffect(() => {
@@ -164,6 +165,8 @@ export default function BookDetails({ id }: BookDetailsProps) {
   }
 
   const returnDate = getReturnDate();
+  const description =
+    book.description || "No description available for this book.";
 
   return (
     <main className="min-h-screen bg-[#F5F0E6] px-3 py-8 dark:bg-[#121B18] sm:px-6 sm:py-14">
@@ -221,9 +224,23 @@ export default function BookDetails({ id }: BookDetailsProps) {
               About This Book
             </h2>
 
-            <p className="mt-3 text-xs leading-6 text-[#66736B] dark:text-[#AAB7AE] sm:text-sm sm:leading-7">
-              {book.description || "No description available for this book."}
+            <p
+              className={`mt-3 text-xs leading-6 text-[#66736B] dark:text-[#AAB7AE] sm:text-sm sm:leading-7 ${
+                showFullDescription ? "" : "line-clamp-5"
+              }`}
+            >
+              {description}
             </p>
+
+            {description.length > 250 && (
+              <button
+                type="button"
+                onClick={() => setShowFullDescription((previous) => !previous)}
+                className="mt-2 w-fit text-xs font-bold text-[#BD7641] transition hover:underline dark:text-[#E5A66F] sm:text-sm"
+              >
+                {showFullDescription ? "Read Less ↑" : "Read More ↓"}
+              </button>
+            )}
 
             {/* Book Copies */}
             <div className="my-6 grid grid-cols-2 gap-3">
